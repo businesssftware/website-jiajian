@@ -11,7 +11,6 @@
 
 
 <body>
-
   <!-- Header from yongjun
   <script>
     fetch('header.html')
@@ -28,8 +27,9 @@
   
   -->
 
-    <!-- Hero Section -->
+    <!-- Hero Section / after header -->
     <section class="hero">
+        <div class="overlay"></div>
         <div class="bg-elements">
             <div class="bg-circle"></div>
             <div class="bg-circle"></div>
@@ -48,7 +48,7 @@
             <button class="cta-button">Discover Oura Ring 4</button>
         </div>
 
-        <div class="ring-container">
+       <!-- <div class="ring-container"> prototype ring only useless! 
             <div class="ring" id="heroRing">
                 <div class="ring-outer">
                     <div class="ring-inner">
@@ -57,7 +57,7 @@
                         <div class="sensor sensor3"></div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </section>
 
@@ -116,18 +116,26 @@
         </div>
     </section>
 
-    <!-- Testimonial Section -->
+    
+    <!-- Testimonial greating Section -->
     <section class="testimonial-section">
         <div class="testimonial-content">
             <div class="app-showcase">
+                <!--card left most -->
                 <div class="person-silhouette">
-                    <div class="projection-bg"></div>
+                    
+                    <div class="projection-bg">
+                         <img src="/plugin/img/home4.png" alt="person use experience showcase from OURA apps" />
+
+                    </div>
                 </div>
+
+                <!-- card right top-->
                 <div class="app-interfaces">
                     <div class="app-card sleep-card">
                         <div class="card-header">
                             <span class="time-label">Time asleep</span>
-                            <button class="close-btn">×</button>
+                            <button class="close-btn">X</button>
                         </div>
                         <div class="sleep-time">7h 43min</div>
                         <div class="sleep-subtitle">Total duration 8h 25m</div>
@@ -150,6 +158,7 @@
                         </div>
                     </div>
                     
+                    <!--  Card right down-->
                     <div class="app-card readiness-card">
                         <div class="card-header">
                             <span class="readiness-label">READINESS</span>
@@ -179,6 +188,7 @@
         </div>
     </section>
 
+
     <!-- News Section -->
     <section class="news-section">
         <div class="news-container">
@@ -188,6 +198,7 @@
                 <div class="featured-article">
                     <div class="article-badge">FEATURED ARTICLE</div>
                     <div class="article-image">
+                        
                         <div class="article-overlay">
                             <h3>The Future of Wellness: AI, Privacy, and the OURA Difference</h3>
                             <button class="read-more-btn">Read More →</button>
