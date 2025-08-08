@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ŌURA - Smart Ring for Health Tracking</title>
     <link rel="stylesheet" href="homepage.css">
-    <link rel="stylesheet" href="/assets/style.css">
-    <link rel="stylesheet" href="/footer/footer.css">
+    <link rel="stylesheet" href="/shared/style.css">
+    <link rel="stylesheet" href="/components/footer/footer.css">
 </head>
 
 
@@ -234,7 +234,7 @@
 
     <script src="homepage.js"></script>
     <script>//dynamic load footer to all page if this code
-    fetch('/footer/footer.html')
+    fetch('/components/footer/footer.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('footer').innerHTML = data;
