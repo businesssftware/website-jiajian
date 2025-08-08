@@ -42,7 +42,7 @@
 
 .payment-icons img:hover {
     transform: scale(3.15);
-    
+
 }
 
 .footer-content {
@@ -94,7 +94,7 @@
     margin-bottom: 20px;
     background: #333;
     border-radius: 50px;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid #444;
 }
 
@@ -109,7 +109,21 @@
 
 .newsletter-form input::placeholder {
     color: #999;
+    font-size: 0.95rem;
 }
+
+.newsletter-form input:hover {
+    background: #bcb8b8;
+    transition: all 0.3s ease;
+    border-radius: 0px;
+    border-bottom: 2px solid rgb(241, 201, 2);
+}
+
+.newsletter-form input:hover::placeholder {
+    color: rgb(151, 47, 255);
+    transition: all 1s ease;
+}
+
 
 .newsletter-form input:focus {
     outline: none;
@@ -121,9 +135,19 @@
     color: white;
     padding: 15px 20px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: auto;
+    border-radius: 50px;
+    box-sizing: content-box;
+
     transition: background 0.3s ease;
 }
+
+.arrow {
+    transform: scale(0.8);
+    display: inline-block;
+}
+
+
 
 .newsletter-form button:hover {
     background: #357ABD;
@@ -160,13 +184,50 @@
     justify-content: center;
     font-size: 18px;
     transition: all 0.3s ease;
+
     text-decoration: none;
+    transition: transform 0.3s ease;
+
+}
+
+.social-links a i {
+    color: white;
+}
+
+.social-links a i:hover {
+    color: deeppink;
+    transition: color 0.3s ease;
 }
 
 .social-links a:hover {
     background: #4A90E2;
-    transform: translateY(-2px);
+    color: burlywood;
+    transform: translateY(-2px) scale(1.2);
+    box-shadow: 0 4px 8px rgba(205, 7, 142, 0.94);
 }
+.social-links .pin {
+    font-size: 20px;
+    color: #fff;
+    background-color: #373636;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-links .pin:hover {
+    text-decoration: underline wavy 0.4px;
+    background-color: burlywood !important;
+    color: burlywood;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transform: scale(1.1);
+}
+
+/*css not follow strcut and who come first ?*/
+
+
 
 .footer-bottom {
     border-top: 1px solid #444;
@@ -208,51 +269,50 @@
 
 
 .payment-icons img {
-  
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: sans-serif;
-  color: #333;
 
-  /* Combine initial states */
-  box-shadow: 0 5px 6.5px rgba(123, 161, 65, 0.929);
-  transform: scale(1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden; /* For the gradient effect */
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    color: #333;
+
+    /* Combine initial states */
+    box-shadow: 0 5px 6.5px rgba(123, 161, 65, 0.929);
+    transform: scale(1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    /* For the gradient effect */
 }
 
 /* Hover effects */
 .payment-icons img:hover {
-  transform: scale(1.7) translateY(-5px) rotate(5deg);
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.2),
-    0 6px 6px rgba(0, 0, 0, 0.1);
+    transform: scale(1.7) translateY(-5px) rotate(5deg);
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        0 6px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Blinking effect using a pseudo-element */
 .payment-icons img ::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0) 50%,
-    rgba(255, 255, 255, 0.2) 100%
-  );
-  background-size: 200% 200%;
-  background-position: -100% 0;
-  transition: background-position 0.5s ease;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0) 50%,
+            rgba(255, 255, 255, 0.2) 100%);
+    background-size: 200% 200%;
+    background-position: -100% 0;
+    transition: background-position 0.5s ease;
 }
 
 .my-card:hover::before {
-  background-position: 100% 0;
+    background-position: 100% 0;
 }
 
 
