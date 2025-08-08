@@ -104,7 +104,7 @@
 
 
       .hero {
-          background-image: url("/plugin/img/home3.png");
+          background-image: url("/assets/img/home3.png");
           background-size: cover;
           background-repeat: no-repeat;
 
@@ -682,7 +682,7 @@
           background-image:
               radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
               radial-gradient(circle at 70% 30%, rgba(0, 0, 0, 0.1) 0%, transparent 50%);
-          background-image: url(/plugin/img/homenews.png);
+          background-image: url(/assets/img/homenews.png);
       }
 
       .article-overlay {
@@ -796,7 +796,7 @@
           padding: 0 80px;
           color: white;
           position: relative;
-          background-image: url(/plugin/img/home2.png);
+          background-image: url(/assets/img/home2.png);
       }
 
       .business-gradient:hover {
