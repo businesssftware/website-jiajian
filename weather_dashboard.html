@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Shields Weather Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .weather-dashboard {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .header {
+            position: absolute;
+            top: -50px;
+            left: 30px;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .time-section {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .current-time {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sun-path {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .sun-path svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sun-times {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #34495e;
+        }
+
+        .sun-time {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .weather-metrics {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-title {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .gauge {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+        }
+
+        .gauge svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #ecf0f1;
+            stroke-width: 8;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .gauge-unit {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .wind-direction-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 40px;
+            background: #e74c3c;
+            transform-origin: bottom center;
+            border-radius: 2px;
+            transition: transform 1s ease;
+        }
+
+        .wind-direction-indicator::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -4px;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 12px solid #e74c3c;
+        }
+
+        .weather-info {
+            flex: 0.8;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .weather-status {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .temperature-display {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .current-temp {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .temp-range {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+
+        .temp-bar {
+            width: 20px;
+            height: 200px;
+            background: linear-gradient(to top, #74b9ff 0%, #fd79a8 50%, #fdcb6e 100%);
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .temp-indicator {
+            position: absolute;
+            right: -30px;
+            width: 10px;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+            transition: top 1s ease;
+        }
+
+        .humidity-gradient {
+            stroke: url(#humidityGradient);
+        }
+
+        .wind-speed-gradient {
+            stroke: url(#windGradient);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .metric-card:hover {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 1200px) {
+            .weather-dashboard {
+                flex-direction: column;
+                height: auto;
+                gap: 30px;
+            }
+            
+            .weather-metrics {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-dashboard">
+        <div class="header">Industrial Shields</div>
+        
+        <div class="time-section">
+            <div class="current-time" id="currentTime">9:24:44</div>
+            
+            <div class="sun-path">
+                <svg viewBox="0 0 300 150">
+                    <defs>
+                        <linearGradient id="sunPathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#f39c12;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#f1c40f;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#e67e22;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 20 130 Q 150 20 280 130" stroke="url(#sunPathGradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <circle id="sunPosition" r="8" fill="#f39c12" cx="150" cy="75">
+                        <animateMotion dur="30s" repeatCount="indefinite">
+                            <mpath href="#sunPath"/>
+                        </animateMotion>
+                    </circle>
+                    <path id="sunPath" d="M 20 130 Q 150 20 280 130" stroke="none" fill="none"/>
+                </svg>
+            </div>
+            
+            <div class="sun-times">
+                <div class="sun-time">
+                    <div style="font-size: 2rem;">☀️</div>
+                    <div>8:15:13</div>
+                    <div style="font-size: 0.9rem; color: #7f8c8d;">Sunrise</div>
+                </div>
+                <div class="sun-time">
+                    <div style="font-size: 1.5rem;">0%</div>
+                    <div style="font-size: 0.9rem; color: #7f8c8d;">Rain</div>
+                </div>
+                <div class="sun-time">
+                    <div style="font-size: 2rem;">🌅</div>
+                    <div>17:50:36</div>
+                    <div style="font-size: 0.9rem; color: #7f8c8d;">Sunset</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weather-metrics">
+            <div class="metric-card">
+                <div class="metric-title">Wind Speed</div>
+                <div class="gauge">
+                    <svg viewBox="0 0 120 120">
+                        <defs>
+                            <linearGradient id="windGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#74b9ff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0984e3;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="50" class="gauge-fill wind-speed-gradient" 
+                                stroke-dasharray="314" stroke-dashoffset="310" id="windSpeedGauge"/>
+                    </svg>
+                    <div class="gauge-value">
+                        <span id="windSpeedValue">1.44</span>
+                        <div class="gauge-unit">m/s</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Wind Direction</div>
+                <div class="gauge">
+                    <svg viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="45" fill="none" stroke="#ecf0f1" stroke-width="2"/>
+                        <!-- Compass directions -->
+                        <text x="60" y="15" text-anchor="middle" fill="#7f8c8d" font-size="12" font-weight="bold">N</text>
+                        <text x="105" y="65" text-anchor="middle" fill="#7f8c8d" font-size="12" font-weight="bold">E</text>
+                        <text x="60" y="110" text-anchor="middle" fill="#7f8c8d" font-size="12" font-weight="bold">S</text>
+                        <text x="15" y="65" text-anchor="middle" fill="#7f8c8d" font-size="12" font-weight="bold">W</text>
+                    </svg>
+                    <div class="wind-direction-indicator" id="windDirectionArrow"></div>
+                    <div class="gauge-value">
+                        <span id="windDirectionValue">350</span>
+                        <div class="gauge-unit">°</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-title">Humidity</div>
+                <div class="gauge">
+                    <svg viewBox="0 0 120 120">
+                        <defs>
+                            <linearGradient id="humidityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#fd79a8;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#e84393;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="50" class="gauge-fill humidity-gradient" 
+                                stroke-dasharray="314" stroke-dashoffset="87" id="humidityGauge"/>
+                    </svg>
+                    <div class="gauge-value">
+                        <span id="humidityValue">87</span>
+                        <div class="gauge-unit">%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weather-info">
+            <div class="weather-status">The weather in Industrial Shields is:</div>
+            <div style="font-size: 2rem; margin: 10px 0;">☀️</div>
+            <div style="font-size: 1.3rem; margin-bottom: 20px;">Clear Sky</div>
+            
+            <div class="temperature-display">
+                <div class="current-temp" id="currentTemp">2.6°C</div>
+                <div class="temp-range">
+                    <div>Min: <span id="minTemp">-0.5°C</span></div>
+                    <div>Max: <span id="maxTemp">8.6°C</span></div>
+                </div>
+                <div class="temp-bar">
+                    <div class="temp-indicator" id="tempIndicator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample API data structure - replace with your actual API endpoint
+        const sampleApiData = {
+            temperature: 2.6,
+            minTemp: -0.5,
+            maxTemp: 8.6,
+            humidity: 87,
+            windSpeed: 1.44,
+            windDirection: 350,
+            weatherCondition: 'clear',
+            location: 'Industrial Shields'
+        };
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        function updateGauge(gaugeId, value, maxValue = 100) {
+            const gauge = document.getElementById(gaugeId);
+            const circumference = 314; // 2 * π * 50
+            const offset = circumference - (value / maxValue) * circumference;
+            gauge.style.strokeDashoffset = offset;
+        }
+
+        function updateWindDirection(degrees) {
+            const arrow = document.getElementById('windDirectionArrow');
+            arrow.style.transform = `translate(-50%, -100%) rotate(${degrees}deg)`;
+        }
+
+        function updateTemperatureIndicator(temp, minTemp, maxTemp) {
+            const indicator = document.getElementById('tempIndicator');
+            const range = maxTemp - minTemp;
+            const position = ((temp - minTemp) / range) * 200;
+            const topPosition = 200 - position;
+            indicator.style.top = `${Math.max(0, Math.min(200, topPosition))}px`;
+        }
+
+        function updateWeatherData(data) {
+            // Update temperature
+            document.getElementById('currentTemp').textContent = `${data.temperature}°C`;
+            document.getElementById('minTemp').textContent = `${data.minTemp}°C`;
+            document.getElementById('maxTemp').textContent = `${data.maxTemp}°C`;
+            updateTemperatureIndicator(data.temperature, data.minTemp, data.maxTemp);
+
+            // Update humidity
+            document.getElementById('humidityValue').textContent = data.humidity;
+            updateGauge('humidityGauge', data.humidity);
+
+            // Update wind speed
+            document.getElementById('windSpeedValue').textContent = data.windSpeed;
+            updateGauge('windSpeedGauge', data.windSpeed, 20); // Max wind speed 20 m/s
+
+            // Update wind direction
+            document.getElementById('windDirectionValue').textContent = data.windDirection;
+            updateWindDirection(data.windDirection);
+        }
+
+        // Function to fetch data from your API
+        async function fetchWeatherData() {
+            try {
+                // Replace this URL with your actual API endpoint
+                // const response = await fetch('YOUR_API_ENDPOINT_HERE');
+                // const data = await response.json();
+                
+                // For demo purposes, using sample data with some randomization
+                const data = {
+                    ...sampleApiData,
+                    temperature: sampleApiData.temperature + (Math.random() - 0.5) * 2,
+                    humidity: Math.max(0, Math.min(100, sampleApiData.humidity + (Math.random() - 0.5) * 10)),
+                    windSpeed: Math.max(0, sampleApiData.windSpeed + (Math.random() - 0.5) * 1),
+                    windDirection: (sampleApiData.windDirection + Math.random() * 20) % 360
+                };
+                
+                updateWeatherData(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        // Initialize the dashboard
+        function initDashboard() {
+            updateTime();
+            updateWeatherData(sampleApiData);
+            
+            // Update time every second
+            setInterval(updateTime, 1000);
+            
+            // Update weather data every 30 seconds (adjust as needed)
+            setInterval(fetchWeatherData, 30000);
+        }
+
+        // Start the dashboard when page loads
+        window.addEventListener('load', initDashboard);
+
+        // To integrate with your API, simply replace the fetchWeatherData function
+        // with a call to your actual endpoint and map the response to the expected format:
+        /*
+        async function fetchWeatherData() {
+            try {
+                const response = await fetch('YOUR_API_ENDPOINT');
+                const apiData = await response.json();
+                
+                const data = {
+                    temperature: apiData.your_temp_field,
+                    minTemp: apiData.your_min_temp_field,
+                    maxTemp: apiData.your_max_temp_field,
+                    humidity: apiData.your_humidity_field,
+                    windSpeed: apiData.your_wind_speed_field,
+                    windDirection: apiData.your_wind_direction_field,
+                    weatherCondition: apiData.your_weather_condition_field,
+                    location: apiData.your_location_field
+                };
+                
+                updateWeatherData(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+        */
+    </script>
+</body>
+</html>

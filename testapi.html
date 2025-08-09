@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather API Test</title>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+
+<h2>OpenWeather API 测试</h2>
+<div id="result">Loading...</div>
+
+<script>
+  const API_KEY = "3e08267a6a1d9c62c0195fe25593f4af"; // 你的 API key
+  const CITY = "Kuala Lumpur";
+
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("API 返回：", data);
+
+      if (data.cod !== 200) {
+        document.getElementById("result").innerHTML = "API 错误：" + data.message;
+        return;
+      }
+
+      let weatherDesc = data.weather && data.weather.length > 0 ? data.weather[0].description : "无";
+      let icon = data.weather && data.weather.length > 0 ? data.weather[0].icon : "";
+
+      document.getElementById("result").innerHTML = `
+        <p>城市：${data.name}</p>
+        <p>天气：${weatherDesc}</p>
+        <p>温度：${data.main.temp}°C</p>
+        <p>湿度：${data.main.humidity}%</p>
+        <p>风速：${data.wind.speed} m/s</p>
+        ${icon ? `<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="icon">` : ""}
+      `;
+    })
+    .catch(err => {
+      document.getElementById("result").innerHTML = "API 请求失败：" + err;
+    });
+</script>
+
+</body>
+</html>

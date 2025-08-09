@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How It Works</title>
+
+    <style>
+      #weather-dashboard {
+        font-family: Arial, sans-serif;
+        background: #0b1b3b;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 280px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .weather-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .weather-card img {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        padding: 5px;
+      }
+
+      .weather-card p {
+        margin: 4px 0;
+        font-size: 1em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <!-- Header from yongjun -->
+    </header>
+    <section>
+      <div id="weather-dashboard">
+        <h2>🌤 Weather Dashboard</h2>
+        <div class="weather-card">
+          <img id="weather-icon" src="" alt="Weather Icon" />
+          <div>
+            <p>🌡 Temperature: <span id="temp"></span>°C</p>
+            <p>💧 Humidity: <span id="humidity"></span>%</p>
+            <p>💨 Wind Speed: <span id="wind"></span> m/s</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="lineBreaks"></div>
+    <script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+    </script>
+    <!-- ✅ 正确引入 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      $(function () {
+        function loadWeather() {
+          $.getJSON(
+            "https://api.openweathermap.org/data/2.5/weather?q=Kuala%20Lumpur&units=metric&appid=3e08267a6a1d9c62c0195fe25593f4af"
+            function (data) {
+              $("#temp").text(data.main.temp.toFixed(1));
+              $("#humidity").text(data.main.humidity);
+              $("#wind").text(data.wind.speed.toFixed(1));
+
+              let iconCode = data.weather[0].icon;
+              $("#weather-icon").attr(
+                "src",
+                "https://openweathermap.org/img/wn/" + iconCode + "@2x.png"
+              );
+            }
+          );
+        }
+
+        loadWeather();  // 页面第一次加载
+        setInterval(loadWeather, 5000); // 每 5 秒更新一次
+      });
+
+
+
+
+
+      let breaks = "";
+      for (let i = 0; i < 1000; i++) {
+        breaks += "<br>";
+      }
+      document.getElementById("lineBreaks").innerHTML = breaks;
+    </script>
+
+    <footer id="footer"></footer>
+    <script src="howitworks.js"></script>
+
+    <script>
+      //dynamic load footer to all page if this code
+      fetch("/components/footer/footer.html")
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById("footer").innerHTML = data; // by tagname ?
+          // footer插入后再加载 footer.js
+          const script = document.createElement("script");
+          script.src = "/components/footer/footer.js";
+          document.body.appendChild(script);
+        });
+
+      // 加载 footer.css（如果没有在 head 里 preload）
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/components/footer/footer.css";
+      document.head.appendChild(link);
+
+      // 加载 shared/style.css
+      const link2 = document.createElement("link");
+      link2.rel = "stylesheet";
+      link2.href = "/shared/style.css";
+      document.head.appendChild(link2);
+      //or
+      ["/components/footer/footer.css", "/shared/style.css"].forEach((href) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+      });
+    </script>
+  </body>
+</html>

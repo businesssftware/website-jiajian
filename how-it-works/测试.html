@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard Bar</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #0b1b3b;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 横向天气条容器 */
+    #dashboard-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.3);
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* 左侧天气信息 */
+    .weather-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.95em;
+      flex: 1 1 auto;
+      justify-content: center;
+    }
+    .weather-info img {
+      width: 36px;
+      height: 36px;
+    }
+
+    /* 仪表盘 */
+    .gauge {
+      flex: 0 0 100px;
+      height: 60px !important;
+    }
+
+    /* 折线图 */
+    .chart {
+      flex: 2 1 auto;
+      min-width: 200px;
+      height: 60px !important;
+    }
+
+    /* 手机优化：隐藏折线图 */
+    @media (max-width: 768px) {
+      .chart {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 横向天气条 -->
+  <div id="dashboard-bar">
+    <!-- 左侧天气文字信息 -->
+    <div class="weather-info">
+      <img id="weather-icon" src="" alt="Weather">
+      <span id="weather-desc">Loading...</span>
+    </div>
+
+    <!-- 温度仪表盘 -->
+    <canvas id="tempGauge" class="gauge"></canvas>
+
+    <!-- 湿度仪表盘 -->
+    <canvas id="humidityGauge" class="gauge"></canvas>
+
+    <!-- 风速折线图 -->
+    <canvas id="windChart" class="chart"></canvas>
+  </div>
+
+  <script>
+    const API_KEY = "你的API_KEY"; // ← 这里换成你的 OpenWeatherMap API key
+    let windData = [];
+    let timeLabels = [];
+
+    // 温度仪表盘
+    const tempGauge = new Chart(document.getElementById("tempGauge"), {
+      type: "doughnut",
+      data: { datasets: [{ data: [0, 50], backgroundColor: ["#ff5733", "#333"], borderWidth: 0 }] },
+      options: {
+        circumference: 180,
+        rotation: -90,
+        cutout: "70%",
+        responsive: true,
+        aspectRatio: 2,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // 湿度仪表盘
+    const humidityGauge = new Chart(document.getElementById("humidityGauge"), {
+      type: "doughnut",
+      data: { datasets: [{ data: [0, 100], backgroundColor: ["#33c1ff", "#333"], borderWidth: 0 }] },
+      options: {
+        cutout: "70%",
+        responsive: true,
+        aspectRatio: 2,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // 风速折线图
+    const windChart = new Chart(document.getElementById("windChart"), {
+      type: "line",
+      data: {
+        labels: [],
+        datasets: [{
+          label: "Wind Speed (m/s)",
+          data: [],
+          borderColor: "#ffff66",
+          backgroundColor: "rgba(255,255,102,0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        aspectRatio: 4,
+        plugins: { legend: { labels: { color: "white" } } },
+        scales: {
+          x: { ticks: { color: "white" } },
+          y: { ticks: { color: "white" } }
+        }
+      }
+    });
+
+    function loadWeather() {
+      $.getJSON(
+        `https://api.openweathermap.org/data/2.5/weather?q=Kuala%20Lumpur&units=metric&appid=${API_KEY}`,
+        function (data) {
+          $("#weather-icon").attr("src", `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`);
+          $("#weather-desc").text(data.weather[0].description);
+
+          tempGauge.data.datasets[0].data = [data.main.temp, 50 - data.main.temp];
+          tempGauge.update('none');
+
+          humidityGauge.data.datasets[0].data = [data.main.humidity, 100 - data.main.humidity];
+          humidityGauge.update('none');
+
+          let time = new Date().toLocaleTimeString();
+          timeLabels.push(time);
+          windData.push(data.wind.speed);
+          if (timeLabels.length > 10) { timeLabels.shift(); windData.shift(); }
+          windChart.data.labels = timeLabels;
+          windChart.data.datasets[0].data = windData;
+          windChart.update('none');
+        }
+      );
+    }
+
+    // 初次加载 + 定时刷新
+    loadWeather();
+    setInterval(loadWeather, 5000);
+  </script>
+
+</body>
+</html>
